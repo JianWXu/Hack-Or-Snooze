@@ -109,6 +109,8 @@ class User {
     this.loginToken = token;
   }
 
+
+//**************************how to test if this works? *****************************************
   async favoritesApi(story) {
     const token = this.loginToken;
     const response = await axios({
