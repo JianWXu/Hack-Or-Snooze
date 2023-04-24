@@ -109,8 +109,6 @@ class User {
     this.loginToken = token;
   }
 
-
-//**************************how to test if this works? *****************************************
   async favoritesApi(story) {
     const token = this.loginToken;
     const response = await axios({
@@ -118,12 +116,36 @@ class User {
       method: "POST",
       params: { token },
     });
-    console.log(response);
   }
 
   async addToFavoritesArray(story) {
     await this.favoritesApi(story);
     this.favorites.push(story);
+  }
+
+  async deleteFavoritesApi(story) {
+    const token = this.loginToken;
+    const response = await axios({
+      url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
+      method: "DELETE",
+      params: { token },
+    });
+    console.log(response);
+  }
+
+  async deleteFavoritesArray(story) {
+    await this.deleteFavoritesApi(story);
+    this.favorites = this.favorites.filter(
+      (favorite) => favorite.storyId !== story.storyId
+    );
+  }
+
+  async addOrRemoveFavorites(story) {
+    for (let i = 0; i < this.favorites.length; i++) {
+      if (this.favorites[i].storyId !== story.storyId) {
+        return await addToFavoritesArray(story);
+      } else return await deleteFavoritesArray(story);
+    }
   }
 
   /** Register new user in API, make User instance & return it.
