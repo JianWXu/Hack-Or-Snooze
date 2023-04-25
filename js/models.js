@@ -134,19 +134,20 @@ class User {
   }
 
   async deleteFavoritesArray(story) {
-    await this.deleteFavoritesApi(story);
+    await this.favorites;
     this.favorites = this.favorites.filter(
       (favorite) => favorite.storyId !== story.storyId
     );
+    await this.deleteFavoritesApi(story);
   }
 
-  async addOrRemoveFavorites(story) {
-    for (let i = 0; i < this.favorites.length; i++) {
-      if (this.favorites[i].storyId !== story.storyId) {
-        return await addToFavoritesArray(story);
-      } else return await deleteFavoritesArray(story);
-    }
-  }
+  // async addOrRemoveFavorites(story) {
+  //   for (let i = 0; i <= this.favorites.length; i++) {
+  //     if (this.favorites[i].storyId == story.storyId) {
+  //       return this.deleteFavoritesArray(story);
+  //     } else return this.addToFavoritesArray(story);
+  //   }
+  // }
 
   /** Register new user in API, make User instance & return it.
    *

@@ -25,7 +25,7 @@ function generateStoryMarkup(story) {
   const hostName = story.getHostName();
   return $(`
       <li id="${story.storyId}">
-      <i class="fa-regular fa-star"></i><a href="${story.url}" target="a_blank" class="story-link">
+      <i class="fa-regular fa-star" id="star"></i><a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
         <small class="story-hostname">(${hostName})</small>
@@ -44,6 +44,7 @@ function putStoriesOnPage() {
 
   // loop through all of our stories and generate HTML for them
   for (let story of storyList.stories) {
+    let i = 0;
     const $story = generateStoryMarkup(story);
     $allStoriesList.append($story);
   }
@@ -68,3 +69,39 @@ async function submitFormStory() {
 }
 
 $submitForm.on("submit", submitFormStory);
+
+async function toggleFavorites(event) {
+  const target = $(event.target);
+  const closestI = target.closest("i");
+  let storyId = closestI.closest("li").attr("id");
+  const story = storyList.stories.find((el) => el.storyId === storyId);
+  console.log(story);
+
+  if (closestI.hasClass("fa-regular")) {
+    closestI.removeClass("fa-regular");
+    closestI.addClass("fa-solid");
+    await currentUser.addToFavoritesArray(story);
+  } else {
+    closestI.removeClass("fa-solid");
+    closestI.addClass("fa-regular");
+    await currentUser.deleteFavoritesArray(story);
+  }
+
+  // addOrRemoveFavorites(story);
+}
+
+$allStoriesList.on("click", "#star", toggleFavorites);
+
+// $(document).ready(function () {
+//   const $star = $("#star");
+//   $("#star").on("click", function () {
+//     console.log("clicked");
+//     if ($("#star").hasClass("fa-regular")) {
+//       $("#star").removeClass("fa-regular");
+//       $("#star").addClass("fa-solid");
+//     } else if ($("#star").hasClass("fa-solid")) {
+//       $("#star").removeClass("fa-solid");
+//       $("#star").addClass("fa-regular");
+//     }
+//   });
+// });
