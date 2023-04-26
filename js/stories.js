@@ -44,7 +44,6 @@ function putStoriesOnPage() {
 
   // loop through all of our stories and generate HTML for them
   for (let story of storyList.stories) {
-    let i = 0;
     const $story = generateStoryMarkup(story);
     $allStoriesList.append($story);
   }
@@ -86,22 +85,6 @@ async function toggleFavorites(event) {
     closestI.addClass("fa-regular");
     await currentUser.deleteFavoritesArray(story);
   }
-
-  // addOrRemoveFavorites(story);
 }
 
 $allStoriesList.on("click", "#star", toggleFavorites);
-
-// $(document).ready(function () {
-//   const $star = $("#star");
-//   $("#star").on("click", function () {
-//     console.log("clicked");
-//     if ($("#star").hasClass("fa-regular")) {
-//       $("#star").removeClass("fa-regular");
-//       $("#star").addClass("fa-solid");
-//     } else if ($("#star").hasClass("fa-solid")) {
-//       $("#star").removeClass("fa-solid");
-//       $("#star").addClass("fa-regular");
-//     }
-//   });
-// });

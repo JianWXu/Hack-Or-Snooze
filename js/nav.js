@@ -41,3 +41,16 @@ function navSubmit() {
 }
 
 $navSubmit.on("click", navSubmit);
+
+function favoriteClick() {
+  let favorites = currentUser.favorites;
+  $userFavoriteList.empty();
+  $allStoriesList.hide();
+  $userFavoriteList.show();
+  for (let favorite of favorites) {
+    const $favorites = generateStoryMarkup(favorite);
+    $userFavoriteList.append($favorites);
+  }
+}
+
+$navUserFavorites.on("click", favoriteClick);
