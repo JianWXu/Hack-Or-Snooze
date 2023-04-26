@@ -141,13 +141,9 @@ class User {
     await this.deleteFavoritesApi(story);
   }
 
-  // async addOrRemoveFavorites(story) {
-  //   for (let i = 0; i <= this.favorites.length; i++) {
-  //     if (this.favorites[i].storyId == story.storyId) {
-  //       return this.deleteFavoritesArray(story);
-  //     } else return this.addToFavoritesArray(story);
-  //   }
-  // }
+   addOrRemoveFavorites(story) {
+    return this.favorites.some((e1) => e1.storyId == story.storyId);
+  }
 
   /** Register new user in API, make User instance & return it.
    *

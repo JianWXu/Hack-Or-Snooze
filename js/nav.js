@@ -46,11 +46,17 @@ function favoriteClick() {
   let favorites = currentUser.favorites;
   $userFavoriteList.empty();
   $allStoriesList.hide();
-  $userFavoriteList.show();
-  for (let favorite of favorites) {
-    const $favorites = generateStoryMarkup(favorite);
-    $userFavoriteList.append($favorites);
+  if (favorites.length === 0) {
+    $userFavoriteList.append("<p>No favorites Added!</p>");
+  } else {
+    for (let favorite of favorites) {
+      const $favorites = generateStoryMarkup(favorite);
+      $userFavoriteList.append($favorites);
+    }    
   }
+  $userFavoriteList.show();
 }
 
 $navUserFavorites.on("click", favoriteClick);
+
+$userFavoriteList.on("click", "#star", favoriteClick);

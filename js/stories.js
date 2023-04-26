@@ -12,6 +12,17 @@ async function getAndShowStoriesOnStart() {
   putStoriesOnPage();
 }
 
+function favoritedStoryChecker(user, story) {
+  let starType = "";
+  let checker = user.addOrRemoveFavorites(story);
+  if (checker) {
+    starType = "fa-solid";
+  } else {
+    starType = "fa-regular";
+  }
+  return starType;
+}
+
 /**
  * A render method to render HTML for an individual Story instance
  * - story: an instance of Story
@@ -21,11 +32,11 @@ async function getAndShowStoriesOnStart() {
 
 function generateStoryMarkup(story) {
   // console.debug("generateStoryMarkup", story);
-
+  let starType = favoritedStoryChecker(currentUser, story);
   const hostName = story.getHostName();
   return $(`
       <li id="${story.storyId}">
-      <i class="fa-regular fa-star" id="star"></i><a href="${story.url}" target="a_blank" class="story-link">
+      <i class="${starType} fa-star" id="star"></i><a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
         <small class="story-hostname">(${hostName})</small>
@@ -88,3 +99,5 @@ async function toggleFavorites(event) {
 }
 
 $allStoriesList.on("click", "#star", toggleFavorites);
+
+$userFavoriteList.on("click", "#star", toggleFavorites);
