@@ -12,8 +12,6 @@ function navAllStories(evt) {
   putStoriesOnPage();
 }
 
-$body.on("click", "#nav-all", navAllStories);
-
 /** Show login/signup on click on "login" */
 
 function navLoginClick(evt) {
@@ -22,8 +20,6 @@ function navLoginClick(evt) {
   $loginForm.show();
   $signupForm.show();
 }
-
-$navLogin.on("click", navLoginClick);
 
 /** When a user first logins in, update the navbar to reflect that. */
 
@@ -40,23 +36,8 @@ function navSubmit() {
   $submitForm.show();
 }
 
+$body.on("click", "#nav-all", navAllStories);
+
+$navLogin.on("click", navLoginClick);
+
 $navSubmit.on("click", navSubmit);
-
-function favoriteClick() {
-  let favorites = currentUser.favorites;
-  $userFavoriteList.empty();
-  $allStoriesList.hide();
-  if (favorites.length === 0) {
-    $userFavoriteList.append("<p>No favorites Added!</p>");
-  } else {
-    for (let favorite of favorites) {
-      const $favorites = generateStoryMarkup(favorite);
-      $userFavoriteList.append($favorites);
-    }    
-  }
-  $userFavoriteList.show();
-}
-
-$navUserFavorites.on("click", favoriteClick);
-
-$userFavoriteList.on("click", "#star", favoriteClick);

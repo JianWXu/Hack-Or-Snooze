@@ -58,10 +58,12 @@ function putStoriesOnPage() {
     const $story = generateStoryMarkup(story);
     $allStoriesList.append($story);
   }
-
+  $userOwnStoriesList.hide();
+  $userFavoriteList.hide();
   $allStoriesList.show();
 }
 
+//submits story info on form and appends it to the page
 async function submitFormStory() {
   let author = $("#author-input").val();
   let title = $("#title-input").val();
@@ -75,17 +77,19 @@ async function submitFormStory() {
   const $myStory = generateStoryMarkup(submittedStory);
   $storiesContainer.append($myStory);
   // $storiesContainer.show();
-  console.log("clicked");
+  $("#author-input").val("");
+  $("#title-input").val("");
+  $("#url-input").val("");
 }
 
-$submitForm.on("submit", submitFormStory);
-
+/*changes star from regular to solid and also add or deletes favorite from API
+according to what type of star it is
+*/
 async function toggleFavorites(event) {
   const target = $(event.target);
   const closestI = target.closest("i");
   let storyId = closestI.closest("li").attr("id");
   const story = storyList.stories.find((el) => el.storyId === storyId);
-  console.log(story);
 
   if (closestI.hasClass("fa-regular")) {
     closestI.removeClass("fa-regular");
@@ -98,6 +102,63 @@ async function toggleFavorites(event) {
   }
 }
 
+//method for "creating" a new page for user favorites page, append fav stories to it
+function favoriteClick() {
+  let favorites = currentUser.favorites;
+  $userFavoriteList.empty();
+  $userOwnStoriesList.hide();
+  $allStoriesList.hide();
+  if (favorites.length === 0) {
+    $userFavoriteList.append("<p>No favorites Added!</p>");
+  } else {
+    for (let favorite of favorites) {
+      const $favorites = generateStoryMarkup(favorite);
+      $userFavoriteList.append($favorites);
+    }
+  }
+  $userFavoriteList.show();
+}
+
+/*method for "creating" a new page for user created stories, append created stories to it
+also adds trashcan emoji to every li created */
+function findOwnStories() {
+  $allStoriesList.hide();
+  $userFavoriteList.hide();
+  let ownStories = currentUser.ownStories;
+  if (ownStories.length === 0) {
+    $userOwnStoriesList.append("<p>No Stories Added</p>");
+  } else {
+    for (let ownStory of ownStories) {
+      const $ownStories = generateStoryMarkup(ownStory);
+      $userOwnStoriesList.append($ownStories);
+    }
+    $("li").each(function () {
+      $(this).prepend("<i class='fa-solid fa-trash-can' id='trashCan'></i>");
+    });
+  }
+  $userOwnStoriesList.show();
+}
+
+//deleting user created story from API and website when user clicks on the trashcan
+async function deleteOwnStory(event) {
+  const target = $(event.target);
+  const closestLi = target.closest("li");
+  let storyId = closestLi.attr("id");
+  const story = storyList.stories.find((el) => el.storyId === storyId);
+  await storyList.deleteStory(currentUser, story);
+  closestLi.remove();
+}
+
+$submitForm.on("submit", submitFormStory);
+
 $allStoriesList.on("click", "#star", toggleFavorites);
 
 $userFavoriteList.on("click", "#star", toggleFavorites);
+
+$userFavoriteList.on("click", "#star", favoriteClick);
+
+$userOwnStoriesList.on("click", "#trashCan", deleteOwnStory);
+
+$navUserFavorites.on("click", favoriteClick);
+
+$navMyStories.on("click", findOwnStories);

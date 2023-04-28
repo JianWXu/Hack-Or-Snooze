@@ -96,7 +96,6 @@ function saveUserCredentialsInLocalStorage() {
   }
 }
 
-
 /******************************************************************************
  * General UI stuff about users
  */

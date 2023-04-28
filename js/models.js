@@ -81,6 +81,17 @@ class StoryList {
     });
     return new Story(newStory);
   }
+
+  /*Delete story data from API */
+
+  async deleteStory(user, story) {
+    const token = user.loginToken;
+    const response = await axios({
+      data: { token },
+      method: "DELETE",
+      url: `${BASE_URL}/stories/${story.storyId}`,
+    });
+  }
 }
 
 /******************************************************************************
@@ -130,7 +141,6 @@ class User {
       method: "DELETE",
       params: { token },
     });
-    console.log(response);
   }
 
   async deleteFavoritesArray(story) {
@@ -141,7 +151,7 @@ class User {
     await this.deleteFavoritesApi(story);
   }
 
-   addOrRemoveFavorites(story) {
+  addOrRemoveFavorites(story) {
     return this.favorites.some((e1) => e1.storyId == story.storyId);
   }
 
